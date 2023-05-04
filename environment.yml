@@ -1,0 +1,19 @@
+name: template
+dependencies:
+- python==3.10
+- pip
+- pip:
+  - black
+  - coverage
+  - flake8
+  - jupyter
+  - jupyterlab
+  - numpy
+  - opencv-python
+  - pandas
+  - Pillow
+  - pre-commit
+  - pytest
+  - torch
+  - torchvision
+  - tqdm

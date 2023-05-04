@@ -1,0 +1,36 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: template
+          environment-file: environment.yml
+          python-version: 3.10
+      - name: Environment setup
+        run: |
+          conda info
+          conda list
+          pip install -e .
+          
+      - name: Tests
+        run: |
+          black .
+          flake8 .
+          pytest tests

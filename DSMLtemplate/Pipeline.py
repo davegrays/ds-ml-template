@@ -32,7 +32,8 @@ class Pipeline:
 
         Args:
             steps (List[str], optional): List of steps to run. If None, run all steps.
-            prev_output (any, optional): Output from previous step. Defaults to None.
+            prev_output (any, optional): Output from step previous to first step.
+             Defaults to None.
 
         Returns:
             any: Output from last step.
@@ -55,12 +56,22 @@ class Pipeline:
         proc_output = None
         if PipelineSteps.PROC.value in steps:
             proc = Proc(self.params)
-            proc_output = proc.run(etl_output)
+            if etl_output is not None:
+                proc_output = proc.run(etl_output)
+            elif prev_output is not None:
+                proc_output = proc.run(prev_output)
+            else:
+                raise ValueError("prev_output and etl_output is None")
             current_output = proc_output
 
         if PipelineSteps.MODEL.value in steps:
             model = Model(self.params)
-            model_output = model.run(proc_output)
+            if proc_output is not None:
+                model_output = model.run(proc_output)
+            elif prev_output is not None:
+                model_output = model.run(prev_output)
+            else:
+                raise ValueError("prev_output and proc_output is None")
             current_output = model_output
 
         return current_output

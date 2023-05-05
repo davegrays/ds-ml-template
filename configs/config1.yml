@@ -1,0 +1,8 @@
+# ETL variables
+ETL_KEY: etl_
+
+# data processing variables
+PROC_KEY: proc_
+
+# model variables
+MODEL_KEY: model_

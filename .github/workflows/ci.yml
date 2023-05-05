@@ -22,13 +22,13 @@ jobs:
         with:
           activate-environment: template
           environment-file: environment.yml
-          python-version: 3.10
+          python-version: 3.11
       - name: Environment setup
         run: |
           conda info
           conda list
           pip install -e .
-          
+
       - name: Tests
         run: |
           black .

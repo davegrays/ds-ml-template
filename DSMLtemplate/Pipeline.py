@@ -45,33 +45,27 @@ class Pipeline:
             if invalid_steps:
                 raise ValueError(f"Invalid steps: {invalid_steps}")
 
-        current_output = None
+        current_output = prev_output
 
-        etl_output = None
         if PipelineSteps.ETL.value in steps:
             etl = ETL(self.params)
             etl_output = etl.run()
+            if etl_output is None:
+                raise ValueError("ETL step returned None")
             current_output = etl_output
 
-        proc_output = None
         if PipelineSteps.PROC.value in steps:
             proc = Proc(self.params)
-            if etl_output is not None:
-                proc_output = proc.run(etl_output)
-            elif prev_output is not None:
-                proc_output = proc.run(prev_output)
-            else:
-                raise ValueError("prev_output and etl_output is None")
+            proc_output = proc.run(current_output)
+            if proc_output is None:
+                raise ValueError("PROC step returned None")
             current_output = proc_output
 
         if PipelineSteps.MODEL.value in steps:
             model = Model(self.params)
-            if proc_output is not None:
-                model_output = model.run(proc_output)
-            elif prev_output is not None:
-                model_output = model.run(prev_output)
-            else:
-                raise ValueError("prev_output and proc_output is None")
+            model_output = model.run(current_output)
+            if model_output is None:
+                raise ValueError("MODEL step returned None")
             current_output = model_output
 
         return current_output

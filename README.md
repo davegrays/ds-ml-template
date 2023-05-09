@@ -3,6 +3,8 @@
 
 An opinionated template repo for data science / ML pipelines in python
 
+Read more about it [in this blog post](https://davegrays.github.io/posts/05-08-2023-ds-ml-template/ds-ml-template.html)
+
 ## Philosophy && Practice
 - Modularity
   - Separate directories for data, notebooks, base package, and tests.
